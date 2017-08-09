@@ -2,7 +2,7 @@
   "name": "adamwpatterson.com",
   "version": "1.0.0",
   "description": "personal website",
-  "main": "server.js",
+  "main": "adam-server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
