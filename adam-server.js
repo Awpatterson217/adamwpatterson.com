@@ -1,29 +1,36 @@
-const http = require("http");                        
-const url = require("url");
-const path = require("path");
-const fs = require("fs");
+const express    = require('express');
+const path       = require('path');
+const bodyParser = require('body-parser');
+const app        = express();
 
-http.createServer(function(request, response) {
-    
-const cwd = process.cwd();
-const pub = cwd + '/pub';
-const name     = url.parse(request.url).pathname;
-const filename = path.join(pub, name);
+const port = 3000;
 
-fs.readFile(filename, "binary", function(err, file) {
+const static   = require('./pub/static');
+const index    = require('./pub/routes/index');
 
-    if(err) {
-        response.writeHead(500, {"Content-Type": "text/plain"});
-        response.write(err + "\n");
-        response.end();
-        return;
-    }
+//View Engine
+app.set('views', path.join(__dirname, './pub/static/views'));
+app.set('view engline', 'ejs');
+app.engine('html', require('ejs').renderFile);
 
-    response.writeHead(200);
-    response.write(file, "binary");
-    response.end();
+// Set Static Folder
+app.use(express.static(path.join(__dirname, 'client')));
+
+// Body Parser MW
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+
+app.use('/', index);
+app.use('/', express.static(__dirname + static + '/css/'));
+app.use('/', express.static(__dirname + static + '/img/'));
+app.use('/', express.static(__dirname + static + '/js/'));
+app.use('/', express.static(__dirname + static + '/external/'));
+
+const server = app.listen(port, () => {
+
+    const host = server.address().address;
+    const port = server.address().port;
+
+    console.log(`Server running at http://${host}:${port}`);
 
 });
-}).listen(3000);
-
-console.log("Server is listening on port 3000.");
