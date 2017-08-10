@@ -5,28 +5,39 @@ const app        = express();
 
 const port = 3000;
 
-//const static   = require('./pub/static');
-//const index    = require('./pub/routes/index');
+app.get('/test', function (req, res, next) {
 
-//View Engine
-//app.set('views', path.join(__dirname, './pub/static/views'));
-//app.set('view engline', 'ejs');
-app.engine('html', require('ejs').renderFile);
+  var options = {
+    root: __dirname + '/public/',
+    dotfiles: 'deny',
+    headers: {
+        'x-timestamp': Date.now(),
+        'x-sent': true
+    }
+  };
 
-// Set Static Folder
-//app.use(express.static(path.join(__dirname, 'client')));
+  //let target = req.params.name;
+  res.sendFile('index.html', options, function (err) {
+    if (err) {
+      next(err);
+    } else {
+      console.log('Sent:', target);
+    }
+  });
 
-// Body Parser MW
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+});
 
-app.use('/', index);
-app.use('/test', 'test.js');
+app.get('/some_data', function (req, res, next) {
+  console.log('GET request to /some_data.')
+  next()
+}, function (req, res) {
+  res.send('GET request to /some_data.')
+})
 
-//app.use('/', express.static(__dirname + static + '/css/'));
-//app.use('/', express.static(__dirname + static + '/img/'));
-//app.use('/', express.static(__dirname + static + '/js/'));
-//app.use('/', express.static(__dirname + static + '/external/'));
+//app.use('/', express.static(__dirname + 'public/static/css/'));
+//app.use('/', express.static(__dirname + 'public/static/img/'));
+//app.use('/', express.static(__dirname + 'public/static/js/'));
+//app.use('/', express.static(__dirname + 'public/static/external/'));
 
 const server = app.listen(port, () => {
 
