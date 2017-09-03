@@ -17,7 +17,7 @@ const options = {
 
 app.get('/test', function (req, res, next) {
 
-  let target = req.params.name;
+  //let target = req.params.name;
   res.sendFile('index.html', options, function (err) {
     if (err) 
       next(err);
