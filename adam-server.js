@@ -6,17 +6,17 @@ const port = 3000;
 const app = express();
 app.use(helmet());
 
+const options = {
+  root: __dirname + '/public/',
+  dotfiles: 'deny',
+  headers: {
+      'x-timestamp': Date.now(),
+      'x-sent': true
+  }
+};
+
 app.get('/test', function (req, res, next) {
 
-  let options = {
-    root: __dirname + '/public/',
-    dotfiles: 'deny',
-    headers: {
-        'x-timestamp': Date.now(),
-        'x-sent': true
-    }
-  };
-  
   //let target = req.params.name;
   res.sendFile('index.html', options, function (err) {
     if (err) 
