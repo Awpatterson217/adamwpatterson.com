@@ -6,7 +6,7 @@ const port = 3000;
 const app = express();
 app.use(helmet());
 
-const options = {
+let options = {
   root: __dirname + '/public/',
   dotfiles: 'deny',
   headers: {
