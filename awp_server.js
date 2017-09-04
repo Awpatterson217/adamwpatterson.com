@@ -37,7 +37,7 @@ app.use(
 //app.use('/', express.static(__dirname + 'public/static/js/'));
 //app.use('/', express.static(__dirname + 'public/static/external/'));
 //        ROUTES
-app.get('/', function (req, res, next) {
+app.get('/home', function (req, res, next) {
   let target = req.params.name;
   res.sendFile('views/index.html', defaultGetOptions, function (err) {
     if (err)
