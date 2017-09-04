@@ -13,8 +13,6 @@ const port   = 3000;
 const host   = '127.0.0.2';
 const app    = express();
 const routes = require('./public/routes/index.js');
-
-// Options
 const defaultGetOptions = {
   root: __dirname + '/public/',
   dotfiles: 'deny',
@@ -46,10 +44,11 @@ app.use('/jquery/', express.static(__dirname + 'public/vendor/jquery/'));
 app.use('/css/', express.static(__dirname + 'public/resources/css/'));
 app.use('/js/', express.static(__dirname + 'public/resources/js/'));
 app.use('/images', express.static(__dirname + 'public/resources/images/'));
-app.use('/includes/', express.static(__dirname + 'public/includes/'));
+app.use('/includes', express.static(__dirname + 'public/includes/'));
 
 //        ROUTES
-app.get('/empty', function (req, res, next) {
+/*
+app.get('/home', function (req, res, next) {
   let target = req.params.name;
   res.sendFile('views/index.html', defaultGetOptions, function (err) {
     if (err)
@@ -85,19 +84,7 @@ app.get('/portfolio', function (req, res, next) {
       console.log('Sent:', target);
   });
 });
-//        TEST
-app.get('/some_data', function (req, res, next) {
-  console.log('GET request to /some_data.');
-  next();
-}, function (req, res) {
-  res.send('GET request to /some_data.');
-});
-app.get('/some_data_two', function (req, res, next) {
-  console.log('GET request to /some_data made.');
-  next();
-}, function (req, res) {
-  res.send('GET request to /some_data_two made.');
-});
+*/
 // Routes
 routes(app);
 /**
