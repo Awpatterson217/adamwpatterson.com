@@ -1,16 +1,19 @@
+"use strict";
 const express    = require('express');
 const bodyParser = require('body-parser');
 const path       = require('path');
 const helmet     = require('helmet');
 const session    = require('express-session');
 const RedisStore = require('connect-redis')(session);
+const ejs        = require('ejs');
 /**
  * Initializations
  */
-const port = 3000;
-const host = '127.0.0.2';
-const app  = express();
-//        OPTIONS
+const port   = 3000;
+const host   = '127.0.0.2';
+const app    = express();
+const routes = require('./public/routes/index.js');
+// Options
 const defaultGetOptions = {
   root: __dirname + '/public/',
   dotfiles: 'deny',
@@ -23,6 +26,13 @@ const redisOptions = {
   port: 6379
 }
 /**
+ * Template engine
+ */
+app.set('view engine', 'ejs');
+// Routes
+routes(app);
+app.engine('.ejs', require('ejs').__express);
+/**
  * Middleware
  */
 app.use(helmet());
@@ -34,8 +44,12 @@ app.use(
 );
 app.use('/bootstrap/', express.static(__dirname + 'public/vendor/bootstrap-4.0.0-alpha.6-dist/'));
 app.use('/jquery/', express.static(__dirname + 'public/vendor/jquery/'));
-//app.use('/', express.static(__dirname + 'public/static/js/'));
-//app.use('/', express.static(__dirname + 'public/static/external/'));
+app.use('/css/', express.static(__dirname + 'public/resources/css/'));
+app.use('/js/', express.static(__dirname + 'public/resources/js/'));
+app.use('/images/', express.static(__dirname + 'public/resources/images/'));
+app.use('/includes/', express.static(__dirname + 'public/includes/'));
+app.use('/views/', express.static(__dirname + 'public/views/'));
+
 //        ROUTES
 app.get('/home', function (req, res, next) {
   let target = req.params.name;
