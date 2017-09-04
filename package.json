@@ -23,7 +23,6 @@
     "express": "^4.15.4",
     "express-session": "^1.15.5",
     "helmet": "^3.8.1",
-    "serve-favicon": "^2.4.3",
     "vue": "^2.4.2"
   }
 }
