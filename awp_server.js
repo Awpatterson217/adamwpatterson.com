@@ -13,7 +13,7 @@ const port   = 3000;
 const host   = '127.0.0.2';
 const app    = express();
 const routes = require('./public/routes/index.js');
-app.use('views', express.static(__dirname + 'public/views'));
+app.set('views', path.join(__dirname, 'public', 'views'));
 
 // Options
 const defaultGetOptions = {
