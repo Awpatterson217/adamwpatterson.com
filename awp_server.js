@@ -33,7 +33,6 @@ const redisOptions = {
 app.set('view engine', 'ejs');
 // Routes
 routes(app);
-app.engine('.ejs', require('ejs').__express);
 /**
  * Middleware
  */
