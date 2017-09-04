@@ -54,6 +54,15 @@ app.get('/about', function (req, res, next) {
       console.log('Sent:', target);
   });
 });
+app.get('/blog', function (req, res, next) {
+  let target = req.params.name;
+  res.sendFile('views/blog.html', defaultGetOptions, function (err) {
+    if (err)
+      next(err);  
+    else
+      console.log('Sent:', target);
+  });
+});
 app.get('/portfolio', function (req, res, next) {
   let target = req.params.name;
   res.sendFile('views/portfolio.html', defaultGetOptions, function (err) {
@@ -63,12 +72,18 @@ app.get('/portfolio', function (req, res, next) {
       console.log('Sent:', target);
   });
 });
-//        TESTING
+//        TEST
 app.get('/some_data', function (req, res, next) {
   console.log('GET request to /some_data.');
   next();
 }, function (req, res) {
   res.send('GET request to /some_data.');
+});
+app.get('/some_data_two', function (req, res, next) {
+  console.log('GET request to /some_data made.');
+  next();
+}, function (req, res) {
+  res.send('GET request to /some_data_two made.');
 });
 /**
  * Server
