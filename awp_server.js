@@ -42,10 +42,28 @@ app.use(
 //app.use('/', express.static(__dirname + 'public/static/js/'));
 //app.use('/', express.static(__dirname + 'public/static/external/'));
 
-/**
- * Testing
- */
-app.get('/test', function (req, res, next) {
+//        ROUTES
+app.get('/home', function (req, res, next) {
+  let target = req.params.name;
+  res.sendFile('index.html', defaultGetOptions, function (err) {
+    if (err)
+      next(err);  
+    else
+      console.log('Sent:', target);
+  });
+});
+
+app.get('/about', function (req, res, next) {
+  let target = req.params.name;
+  res.sendFile('index.html', defaultGetOptions, function (err) {
+    if (err)
+      next(err);  
+    else
+      console.log('Sent:', target);
+  });
+});
+
+app.get('/portfolio', function (req, res, next) {
   let target = req.params.name;
   res.sendFile('index.html', defaultGetOptions, function (err) {
     if (err)
