@@ -13,8 +13,6 @@ const port   = 3000;
 const host   = '127.0.0.2';
 const app    = express();
 const routes = require('./public/routes/index.js');
-app.set('views', path.join(__dirname, 'public', 'views'));
-app.use('/includes/', express.static(__dirname + 'public/includes/'));
 
 // Options
 const defaultGetOptions = {
@@ -32,8 +30,7 @@ const redisOptions = {
  * Template engine
  */
 app.set('view engine', 'ejs');
-// Routes
-routes(app);
+app.set('views', path.join(__dirname, 'public', 'views'));
 /**
  * Middleware
  */
@@ -49,6 +46,7 @@ app.use('/jquery/', express.static(__dirname + 'public/vendor/jquery/'));
 app.use('/css/', express.static(__dirname + 'public/resources/css/'));
 app.use('/js/', express.static(__dirname + 'public/resources/js/'));
 app.use('/images', express.static(__dirname + 'public/resources/images/'));
+app.use('/includes/', express.static(__dirname + 'public/includes/'));
 
 //        ROUTES
 app.get('/empty', function (req, res, next) {
@@ -100,6 +98,8 @@ app.get('/some_data_two', function (req, res, next) {
 }, function (req, res) {
   res.send('GET request to /some_data_two made.');
 });
+// Routes
+routes(app);
 /**
  * Server
  */
