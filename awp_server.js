@@ -39,12 +39,12 @@ app.use(
     secret: 'keyboard cat'
   })
 );
-app.use('/bootstrap/', express.static(__dirname + 'vendor/bootstrap-4.0.0-alpha.6-dist/'));
-app.use('/jquery/', express.static(__dirname + 'vendor/jquery/'));
-app.use('/css/', express.static(__dirname + 'resources/css/'));
-app.use('/js/', express.static(__dirname + 'resources/js/'));
-app.use('/images', express.static(__dirname + 'resources/images/'));
-//app.use('includes', express.static(__dirname + 'public/includes'));
+app.use('/bootstrap', express.static(__dirname + '/vendor/bootstrap-4.0.0-alpha.6-dist/'));
+app.use('/jquery', express.static(__dirname + '/vendor/jquery/'));
+app.use('/css', express.static(__dirname + '/resources/css/'));
+app.use('/js', express.static(__dirname + '/resources/js/'));
+app.use('/images', express.static(__dirname + '/resources/images/'));
+app.use('/includes', express.static(__dirname + '/public/includes/'));
 
 //        ROUTES
 /*
