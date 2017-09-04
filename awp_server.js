@@ -14,6 +14,7 @@ const host   = '127.0.0.2';
 const app    = express();
 const routes = require('./public/routes/index.js');
 app.set('views', path.join(__dirname, 'public', 'views'));
+app.use('/includes/', express.static(__dirname + 'public/includes/'));
 
 // Options
 const defaultGetOptions = {
@@ -48,7 +49,6 @@ app.use('/jquery/', express.static(__dirname + 'public/vendor/jquery/'));
 app.use('/css/', express.static(__dirname + 'public/resources/css/'));
 app.use('/js/', express.static(__dirname + 'public/resources/js/'));
 app.use('/images', express.static(__dirname + 'public/resources/images/'));
-app.use('/includes/', express.static(__dirname + 'public/includes/'));
 
 //        ROUTES
 app.get('/empty', function (req, res, next) {
