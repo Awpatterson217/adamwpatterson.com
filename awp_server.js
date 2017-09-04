@@ -25,8 +25,9 @@ const redisOptions = {
   port: 6379
 }
 
-//        MIDDLEWARE
-
+/**
+ * Middleware
+ */
 app.use(helmet());
 
 app.use(
@@ -41,8 +42,9 @@ app.use(
 //app.use('/', express.static(__dirname + 'public/static/js/'));
 //app.use('/', express.static(__dirname + 'public/static/external/'));
 
-//        TESTING
-
+/**
+ * Testing
+ */
 app.get('/test', function (req, res, next) {
   let target = req.params.name;
   res.sendFile('index.html', defaultGetOptions, function (err) {
@@ -60,8 +62,9 @@ app.get('/some_data', function (req, res, next) {
   res.send('GET request to /some_data.');
 });
 
-//        SERVER
-
+/**
+ * Server
+ */
 const server = app.listen(port, () => {
     const host = server.address().address;
     const port = server.address().port;
