@@ -51,7 +51,7 @@ app.use('/includes/', express.static(__dirname + 'public/includes/'));
 app.use('/views/', express.static(__dirname + 'public/views/'));
 
 //        ROUTES
-app.get('/home', function (req, res, next) {
+app.get('/empty', function (req, res, next) {
   let target = req.params.name;
   res.sendFile('views/index.html', defaultGetOptions, function (err) {
     if (err)
