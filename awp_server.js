@@ -26,7 +26,7 @@ const redisOptions = {
  * Middleware
  */
 app.use(helmet());
-app.use(favicon(path.join(__dirname, 'public/resources/images/favicon', 'favicon.ico')));
+app.use(favicon(path.join(__dirname, 'public', 'resources', 'images', 'favicon', 'favicon.ico')));
 app.use(
   session({
     store: new RedisStore(redisOptions),
