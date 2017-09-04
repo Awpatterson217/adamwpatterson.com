@@ -8,6 +8,7 @@ const RedisStore = require('connect-redis')(session);
  * Initializations
  */
 const port = 3000;
+const host = '127.0.0.2';
 const app  = express();
 //        OPTIONS
 const defaultGetOptions = {
@@ -88,7 +89,7 @@ app.get('/some_data_two', function (req, res, next) {
 /**
  * Server
  */
-const server = app.listen(port, () => {
+const server = app.listen(port, host, () => {
     const host = server.address().address;
     const port = server.address().port;
     console.log(`Server running at http://${host}:${port}`);
