@@ -2,7 +2,7 @@
 
 module.exports = function(app) {
  app.get('/home', function(req, res) {
-   res.render('/index');
+   res.render('index');
  });
  app.get('/about', function(req, res) {
    res.render('/about');
