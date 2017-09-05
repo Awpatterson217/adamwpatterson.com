@@ -44,8 +44,6 @@ app.use('/jquery', express.static(__dirname + '/public/vendor/jquery/'));
 app.use('/css', express.static(__dirname + '/public/resources/css/'));
 app.use('/js', express.static(__dirname + '/public/resources/js/'));
 app.use('/images', express.static(__dirname + '/public/resources/images/'));
-app.use('/includes', express.static(__dirname + '/public/includes/'));
-
 // Routes
 routes(app);
 /**
