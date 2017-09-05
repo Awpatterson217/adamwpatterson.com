@@ -39,52 +39,13 @@ app.use(
     secret: 'keyboard cat'
   })
 );
-app.use('/bootstrap', express.static(__dirname + '/vendor/bootstrap-4.0.0-alpha.6-dist/'));
-app.use('/jquery', express.static(__dirname + '/vendor/jquery/'));
-app.use('/css', express.static(__dirname + '/resources/css/'));
-app.use('/js', express.static(__dirname + '/resources/js/'));
-app.use('/images', express.static(__dirname + '/resources/images/'));
+app.use('/bootstrap', express.static(__dirname + '/public/vendor/bootstrap-4.0.0-alpha.6-dist/'));
+app.use('/jquery', express.static(__dirname + '/public/vendor/jquery/'));
+app.use('/css', express.static(__dirname + '/public/resources/css/'));
+app.use('/js', express.static(__dirname + '/public/resources/js/'));
+app.use('/images', express.static(__dirname + '/public/resources/images/'));
 app.use('/includes', express.static(__dirname + '/public/includes/'));
 
-//        ROUTES
-/*
-app.get('/home', function (req, res, next) {
-  let target = req.params.name;
-  res.sendFile('views/index.html', defaultGetOptions, function (err) {
-    if (err)
-      next(err);  
-    else
-      console.log('Sent:', target);
-  });
-});
-app.get('/about', function (req, res, next) {
-  let target = req.params.name;
-  res.sendFile('views/about.html', defaultGetOptions, function (err) {
-    if (err)
-      next(err);  
-    else
-      console.log('Sent:', target);
-  });
-});
-app.get('/blog', function (req, res, next) {
-  let target = req.params.name;
-  res.sendFile('views/blog.html', defaultGetOptions, function (err) {
-    if (err)
-      next(err);  
-    else
-      console.log('Sent:', target);
-  });
-});
-app.get('/portfolio', function (req, res, next) {
-  let target = req.params.name;
-  res.sendFile('views/portfolio.html', defaultGetOptions, function (err) {
-    if (err)
-      next(err);  
-    else
-      console.log('Sent:', target);
-  });
-});
-*/
 // Routes
 routes(app);
 /**
