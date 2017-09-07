@@ -41,6 +41,7 @@ app.use(
 );
 app.use('/bootstrap', express.static(__dirname + '/public/vendor/bootstrap-4.0.0-alpha.6-dist/'));
 app.use('/jquery', express.static(__dirname + '/public/vendor/jquery/'));
+app.use('/vue', express.static(__dirname + '/public/vendor/vue/'));
 app.use('/css', express.static(__dirname + '/public/resources/css/'));
 app.use('/js', express.static(__dirname + '/public/resources/js/'));
 app.use('/images', express.static(__dirname + '/public/resources/images/'));
