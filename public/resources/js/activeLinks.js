@@ -8,8 +8,9 @@ let removeAllActive = function(){
 }
 
 let addActive = function(){
-    if(currentPage !== 'home' || '/')
-        document.getElementById(`${currentPage}`).classList.add("active");    
+    if (typeof(currentPage) !== 'undefined' && currentPage !== null && currentPage !== ''){
+        document.getElementById(`${currentPage}`).classList.add("active");
+    }
 }
 
 removeAllActive();
