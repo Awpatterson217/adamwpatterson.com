@@ -14,5 +14,4 @@ let addActive = function(){
 	}
 }
 
-removeAllActive();
 addActive();
