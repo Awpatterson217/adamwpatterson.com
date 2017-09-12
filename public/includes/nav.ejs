@@ -1,18 +1,33 @@
-<nav class="navbar navbar-toggleable-md">
-    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+<nav class="navbar navbar-toggleable-md navbar-inverse bg-inverse fixed-top">
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
+    <a class="navbar-brand" href="/home">adamwpatterson</a>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-        <div class="navbar-nav">
-        <a class="nav-item nav-link" href="/home">Home</a>
-        <a class="nav-item nav-link" href="/portfolio">Portfolio</a>        
-        <a class="nav-item nav-link" href="/about">About</a>
-        <a class="nav-item nav-link" href="/contact">Contact</a>
-        <a class="nav-item nav-link" href="/blog">Blog</a>        
-        <a class="nav-item nav-link" href="/august">August</a>
-        <span class="navbar-text text-center">
-            adamwpatterson.com
-        </span>
-        </div>
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="/portfolio">Portfolio <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/about">About</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/contact">Contact</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/blog">Blog</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/august">August</a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Visit</a>
+                <div class="dropdown-menu" aria-labelledby="dropdown01">
+                    <a class="dropdown-item" href="https://www.linkedin.com/in/adamwpatterson/">LinkedIn</a>
+                    <a class="dropdown-item" href="https://github.com/Awpatterson217">GitHub</a>
+                    <a class="dropdown-item" href="https://stackoverflow.com/users/6643918/adam-patterson?tab=profile">Stackoverflow</a>
+                </div>
+            </li>
+        </ul>
     </div>
 </nav>
