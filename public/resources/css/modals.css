@@ -1,0 +1,15 @@
+.modal.contactModal .modal-dialog {
+    width: 50%;
+    margin: 0 auto;
+}
+.modal.contactModal .modal-dialog .modal-header {
+    background: #E8E8E8;
+}
+.modal.contactModal .modal-dialog .modal-body {
+}
+.modal.contactModal .modal-dialog .modal-footer {
+    background: #E8E8E8;
+}
+.modal{
+    border-radius: 0 0 10px 10px;
+}
