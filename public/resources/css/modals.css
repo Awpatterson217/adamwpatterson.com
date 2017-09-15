@@ -1,6 +1,33 @@
-.modal.contactModal .modal-dialog {
-    width: 50%;
-    margin: 0 auto;
+/* 
+* Small devices (landscape phones, 576px and up)
+*/
+@media (min-width: 576px) {
+
+}
+/* 
+* Medium devices (tablets, 768px and up)
+*/
+@media (min-width: 768px) { 
+    .modal.contactModal .modal-dialog {
+        width: 50%;
+        margin: 0 auto;
+    }
+}
+/* 
+* Large devices (desktops, 992px and up)
+*/
+@media (min-width: 992px) {
+
+}
+/*
+* Extra large devices (large desktops, 1200px and up)
+*/
+@media (min-width: 1200px) {
+
+}
+@media only screen 
+and (max-device-width: 600px){
+
 }
 .modal.contactModal .modal-dialog .modal-header {
     background: #E8E8E8;
