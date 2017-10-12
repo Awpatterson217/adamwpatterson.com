@@ -14,8 +14,9 @@ const port   = 3000;
 const host   = '127.0.0.2';
 const app    = express();
 const routes = require('./local/routes');
-const parser = bodyParser.urlencoded({
-  extended: true
+const limiter = require('express-limiter')(app, client);
+const parser  = bodyParser.urlencoded({
+  extended: false
 });
 const defaultGetOptions = {
   root: __dirname + '/public/',
@@ -46,7 +47,7 @@ app.use(
     resave: false,
     key: 'sessionid',
     cookie: {
-      secure: true,
+      //secure: true,
       httpOnly: true,
       expires: new Date( Date.now() + 60 * 60 * 1000 )
     }
