@@ -1,4 +1,5 @@
 "use strict";
+
 const express    = require('express');
 const bodyParser = require('body-parser');
 const path       = require('path');
@@ -7,9 +8,7 @@ const redis      = require("redis");
 const session    = require('express-session');
 const RedisStore = require('connect-redis')(session);
 const ejs        = require('ejs');
-/**
- * Initializations
- */
+
 const port   = 3000;
 const host   = '127.0.0.2';
 const app    = express();
@@ -18,6 +17,7 @@ const limiter = require('express-limiter')(app, client);
 const parser  = bodyParser.urlencoded({
   extended: false
 });
+
 const defaultGetOptions = {
   root: __dirname + '/public/',
   dotfiles: 'deny',
@@ -29,14 +29,10 @@ const defaultGetOptions = {
 const redisOptions = {
   port: 6379
 }
-/**
- * Template engine
- */
+
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'public', 'views'));
-/**
- * Middleware
- */
+
 app.use(helmet());
 app.use(helmet.hidePoweredBy());
 app.use(
@@ -53,8 +49,9 @@ app.use(
     }
   })
 );
+
 app.use(parser); 
-// Static
+
 app.use('/bootstrap', express.static(__dirname + '/public/vendor/bootstrap-4.0.0-alpha.6-dist/'));
 app.use('/jquery', express.static(__dirname + '/public/vendor/jquery/'));
 app.use('/vue', express.static(__dirname + '/public/vendor/vue/'));
@@ -62,14 +59,14 @@ app.use('/mdb', express.static(__dirname + '/public/vendor/mdb/'));
 app.use('/css', express.static(__dirname + '/public/resources/css/'));
 app.use('/js', express.static(__dirname + '/public/resources/js/'));
 app.use('/images', express.static(__dirname + '/public/resources/images/'));
-// Routes
+
 for(let route in routes){
   app.use(routes[route]);
-}/**
- * Server
- */
+}
+
 const server = app.listen(port, host, () => {
-    const host = server.address().address;
-    const port = server.address().port;
-    console.log(`Server running at http://${host}:${port}`);
+  const host = server.address().address;
+  const port = server.address().port;
+  console.log(`Server running at http://${host}:${port}`);
 });
+  
