@@ -1,72 +1,106 @@
 "use strict";
 
 const express    = require('express');
+const https      = require('https');
 const bodyParser = require('body-parser');
 const path       = require('path');
+const fs         = require('fs');
 const helmet     = require('helmet');
-// const redis      = require("redis");
-// const session    = require('express-session');
-// const RedisStore = require('connect-redis')(session);
+const redis      = require("redis");
+const session    = require('express-session');
+const RedisStore = require('connect-redis')(session);
 const ejs        = require('ejs');
 
-const port   = 3000;
-const host   = '127.0.0.2';
-const app    = express();
+const { checkAuth } = require('./local/node_modules/lib/middleware');
+
 const routes = require('./local/routes');
-// const limiter = require('express-limiter')(app, client);
-const parser  = bodyParser.urlencoded({
+const APIs   = require('./local/api');
+
+const urlEncParser = bodyParser.urlencoded({
   extended: false
 });
+const jsonParser = bodyParser.json();
 
-const defaultGetOptions = {
-  root: __dirname + '/public/',
-  dotfiles: 'deny',
-  headers: {
-      'x-timestamp': Date.now(),
-      'x-sent': true
-  }
+const ttl = 180;  
+
+const PORT = process.env.AWP_PORT;
+let HOST   = process.env.AWP_HOST;
+
+let SECRET = process.env.UNITY_SECRET;
+
+if (typeof SECRET !== 'undefined'){
+  SECRET = SECRET.trim();
+} else {
+  console.log("SECRET is undefined");
 }
+if (typeof HOST !== 'undefined') {
+  HOST = HOST.trim();
+} else {
+  console.log("HOST is undefined");
+}
+
+const client       = redis.createClient();
 const redisOptions = {
-  port: 6379
+  client,
+  ttl
 }
+
+client.on("error", function(err) {
+  // TODO: LOG
+  console.log("Error " + err);
+});
+
+const app = express();
+
+const limiter = require('express-limiter')(app, client);
+// Limit requests to 150 per hour per IP
+limiter({
+  lookup: ['connection.remoteAddress'],
+  total : 150,
+  expire: 1000 * 60 * 60
+})
 
 app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'public', 'views'));
+app.set('views', [
+  path.join(__dirname, 'dist/views'),
+  path.join(__dirname, 'dist/dashboard'),
+]);
+
+app.use(
+  session({
+    store : new RedisStore(redisOptions),
+    secret: SECRET,
+    saveUninitialized: false,
+    resave: false
+  })
+);
 
 app.use(helmet());
 app.use(helmet.hidePoweredBy());
-// app.use(
-//  session({
-//    store: new RedisStore(redisOptions),
-//    secret: 'secret',
-//    saveUninitialized: false,
-//    resave: false,
-//    key: 'sessionid',
-//    cookie: {
-      //secure: true,
-//      httpOnly: true,
-//      expires: new Date( Date.now() + 60 * 60 * 1000 )
-//    }
-//  })
-//);
+app.use(urlEncParser); 
+app.use(jsonParser); 
+app.use('/css'   , express.static(__dirname + '/dist/css'));
+app.use('/js'    , express.static(__dirname + '/dist/js'));
+app.use('/images', express.static(__dirname + '/dist/media/images'));
+app.use('/assets', express.static(__dirname + '/dist/dashboard/assets'));
 
-app.use(parser); 
+app.use('/api', checkAuth);
 
-app.use('/bootstrap', express.static(__dirname + '/public/vendor/bootstrap-4.0.0-alpha.6-dist/'));
-app.use('/jquery', express.static(__dirname + '/public/vendor/jquery/'));
-app.use('/vue', express.static(__dirname + '/public/vendor/vue/'));
-app.use('/mdb', express.static(__dirname + '/public/vendor/mdb/'));
-app.use('/css', express.static(__dirname + '/public/resources/css/'));
-app.use('/js', express.static(__dirname + '/public/resources/js/'));
-app.use('/images', express.static(__dirname + '/public/resources/images/'));
-
-for(let route in routes){
-  app.use(routes[route]);
+for (let apiKey in APIs) {
+  app.use('/api', APIs[apiKey]);
 }
 
-const server = app.listen(port, host, () => {
-  const host = server.address().address;
-  const port = server.address().port;
-  console.log(`Server running at http://${host}:${port}`);
+for (let routeKeys in routes) {
+  app.use(routes[routeKeys]);
+}
+// Default error handler
+app.use(function (err, req, res, next) {
+  console.error(err.stack)
+  res.status(404).render('error', { url: req.originalUrl });
 });
-  
+
+app.use(function(req, res, next){
+  res.status(404).render('error', { url: req.originalUrl });
+});
+
+app.listen(PORT, HOST);
