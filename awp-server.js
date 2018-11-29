@@ -2,33 +2,53 @@
 
 const express = require('express');
 
-const db = require('./local/connections/mongoDB');
+const {
+    app: {
+        host,
+        port,
+        getPath
+    },
+    mongoDB: {
+        host: dbHost,
+        port: dbPort
+    }
+} = require('./local/config');
+/**
+ * PM2 Interface.
+ */
 const pm = require('./local/connections/pm2');
-const config = require('./local/config');
+/**
+ * Manages connection references for convenience.
+ */
+const manager = require('./local/connections/manager');
 
-const { host, port, getPublicPath } = config.app;
+const {
+    getClient,
+    MongoDBCollection
+} = require('./local/connections/mongoDB');
 
-const publicPath = getPublicPath(__dirname);
+const mongoClient = getClient({ host: dbHost, port: dbPort});
 
 const app = express();
+const { log } = console;
+const publicPath = getPath(__dirname);
 
-require('./local/middleware')(app, publicPath);
-
-db.connect()
+// Application shares a single MongoDB connection.
+mongoClient.connect()
     .then((client) => {
+        // Store reference to MongoDB client.
+        manager.setMongoDB(client);
+
         const { host: mHost, port: mPort} = client.topology;
 
-        console.log(`\nConnected to MongoDB server running at ${mHost}:${mPort}\n`);
-
-        process.on('SIGINT', function() {
-            client.close(true, () => {
-                console.log('Database connection closed.');
-            });
-
-            process.exit(0);
-         });
+        log(`\nConnected to MongoDB server running at ${mHost}:${mPort}\n`);
     })
+    // Application shares a single PM2 connection.
     .then(pm.connect)
+    .then(() => {
+        // Store reference to PM2 Interface.
+        manager.setPm(pm);
+    })
     .then(pm.list)
     .then((processes) => {
         processes.forEach((process) => {
@@ -45,20 +65,47 @@ db.connect()
                 }
             } = process;
 
-            console.log(`\nProcess ${name} is ${status}\n`);
-            console.log(`Running from: ${pm_cwd}.\n`);
-            console.log(`Running time: ${pm_uptime}.\n`);
-            console.log(`Memory Usage: ${memory} bytes.\n`);
-            console.log(`CPU Usage: ${cpu}%.\n`);
-        })
+            log(`\nProcess ${name} is ${status}\n`);
+            log(`Running from: ${pm_cwd}.\n`);
+            log(`Running time: ${pm_uptime}.\n`);
+            log(`Memory Usage: ${memory} bytes.\n`);
+            log(`CPU Usage: ${cpu}%.\n`);
+        });
     })
     .then(() => {
+        const middlewareConfig = {
+            publicPath,
+            mongoDB: manager.getMongoDB(),
+            pm: manager.getPm()
+        };
+
+        // Inject middleware dependencies in config.
+        // EX: DB connections.
+        require('./local/middleware')(app, middlewareConfig);
+
+        // Application shares a single Node.js server (for now).
         const server = app.listen(port, host, () => {
+            // Store reference to server.
+            manager.setServer(server);
+
             const host = server.address().address;
             const port = server.address().port;
-            console.log(`Node.js Server running at http://${host}:${port}`);
+
+            log(`Node.js Server running at http://${host}:${port}`);
         });
     })
     .catch((error) => {
-        console.log({error});
+        log({error});
     });
+
+process.on('SIGINT', () => {
+    process.emit('cleanup');
+});
+
+process.on('SIGTERM', () => {
+    process.emit('cleanup');
+});
+
+process.on('cleanup', () => {
+    manager.gracefulExit(() => process.exit(0));
+});

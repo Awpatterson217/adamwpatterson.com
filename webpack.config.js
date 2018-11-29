@@ -1,10 +1,12 @@
 'use strict';
 
 const HtmlWebPackPlugin = require('html-webpack-plugin');
+const webpack = require('webpack');
 
 const htmlPlugin = new HtmlWebPackPlugin({
-    template: './public/views/index.html',
-    filename: './index.html'
+    template: './public/index.html',
+    filename: './index.html',
+    inject: 'body'
 });
 
 module.exports = {
@@ -35,8 +37,13 @@ module.exports = {
                     }
                 }
             ]
-        }
+        },
       ]
     },
-    plugins: [htmlPlugin]
+    plugins: [
+        htmlPlugin,
+        new webpack.ProvidePlugin({
+            React: 'react' // ReactJS module name in node_modules folder
+          })
+    ]
   };

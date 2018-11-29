@@ -8,7 +8,7 @@ const development = {
   app: {
     host: 'localhost',
     port: 3000,
-    getPublicPath: root => path.join(root, 'dist')
+    getPath: root => path.join(root, 'dist')
   },
   mongoDB: {
     host: 'localhost',
@@ -21,7 +21,7 @@ const production = {
   app: {
     host: process.env.APP_HOST,
     port: parseInt(process.env.APP_PORT),
-    getPublicPath: root => path.join(root, 'dist')
+    getPath: root => path.join(root, 'dist')
   },
   mongoDB: {
     host: process.env.DB_HOST,

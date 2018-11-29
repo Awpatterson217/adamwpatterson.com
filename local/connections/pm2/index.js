@@ -18,4 +18,4 @@ module.exports = {
     reload,
     restart,
     disconnect: pm2.disconnect
-}
+};
