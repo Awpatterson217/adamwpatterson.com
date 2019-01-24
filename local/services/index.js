@@ -3,17 +3,21 @@
 const express = require('express');
 
 module.exports = function(app, config) {
-    const services = require('./services')(config);
+    const { pm, mongoDB } = config;
+
     /**
      * Root application.
      */
     app.use(express.static(config.publicPath));
     /**
-     * Microservices.
+     * Services.
      */
+    const services = [
+        // require('./process')({ pm }),
+    ];
     services.forEach(service => app.use('/service', service));
     /**
-     * Last case scenario.
+     * Unhandled requests.
      */
     app.use((req, res, next) => {
         const { originalUrl: url } = req;

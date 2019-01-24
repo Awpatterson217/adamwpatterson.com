@@ -16,16 +16,16 @@ const {
 /**
  * PM2 Interface.
  */
-const pm = require('./local/connections/pm2');
+const pm = require('./local/lib/pm2');
 /**
  * Manages connection references for convenience.
  */
-const manager = require('./local/connections/manager');
+const connectionManager = require('./local/lib/connection-manager');
 
 const {
     getClient,
     MongoDBCollection
-} = require('./local/connections/mongoDB');
+} = require('./local/lib/mongoDB');
 
 const mongoClient = getClient({ host: dbHost, port: dbPort});
 
@@ -37,7 +37,7 @@ const publicPath = getPath(__dirname);
 mongoClient.connect()
     .then((client) => {
         // Store reference to MongoDB client.
-        manager.setMongoDB(client);
+        connectionManager.setMongoDB(client);
 
         const { host: mHost, port: mPort} = client.topology;
 
@@ -47,7 +47,7 @@ mongoClient.connect()
     .then(pm.connect)
     .then(() => {
         // Store reference to PM2 Interface.
-        manager.setPm(pm);
+        connectionManager.setPm(pm);
     })
     .then(pm.list)
     .then((processes) => {
@@ -75,18 +75,18 @@ mongoClient.connect()
     .then(() => {
         const middlewareConfig = {
             publicPath,
-            mongoDB: manager.getMongoDB(),
-            pm: manager.getPm()
+            mongoDB: connectionManager.getMongoDB(),
+            pm: connectionManager.getPm()
         };
 
         // Inject middleware dependencies in config.
         // EX: DB connections.
-        require('./local/middleware')(app, middlewareConfig);
+        require('./local/services')(app, middlewareConfig);
 
         // Application shares a single Node.js server (for now).
         const server = app.listen(port, host, () => {
             // Store reference to server.
-            manager.setServer(server);
+            connectionManager.setServer(server);
 
             const host = server.address().address;
             const port = server.address().port;
@@ -107,5 +107,5 @@ process.on('SIGTERM', () => {
 });
 
 process.on('cleanup', () => {
-    manager.gracefulExit(() => process.exit(0));
+    connectionManager.gracefulExit(() => process.exit(0));
 });

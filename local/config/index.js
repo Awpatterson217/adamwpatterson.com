@@ -15,7 +15,7 @@ const development = {
     port: 27017,
     name: 'test'
   }
-};
+}; 
 
 const production = {
   app: {
